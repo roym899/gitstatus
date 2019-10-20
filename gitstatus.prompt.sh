@@ -42,11 +42,14 @@ function gitstatus_prompt_update() {
   gitstatus_query "$@"                  || return 1  # error
   [[ "$VCS_STATUS_RESULT" == ok-sync ]] || return 0  # not a git repo
 
-  local      reset=$'\e[0m'         # no color
-  local      clean=$'\e[38;5;076m'  # green foreground
-  local  untracked=$'\e[38;5;014m'  # teal foreground
-  local   modified=$'\e[38;5;011m'  # yellow foreground
-  local conflicted=$'\e[38;5;196m'  # red foreground
+  # \001 \002 to wrap nonprinting characters inside function
+  # 38;5; means 256 color scheme, number after is the color
+  # last number is attribute, 1=bold
+  local      reset=$'\001\e[0m\002'         # no color
+  local      clean=$'\001\e[38;5;076;1m\002'  # green foreground
+  local  untracked=$'\001\e[38;5;014;1m\002'  # teal foreground
+  local   modified=$'\001\e[38;5;011;1m\002'  # yellow foreground
+  local conflicted=$'\001\e[38;5;196;1m\002'  # red foreground
 
   local p
 
